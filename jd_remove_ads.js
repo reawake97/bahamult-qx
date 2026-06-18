@@ -175,13 +175,26 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
     obj.floors = newFloors;
   }
 } else if (url.includes("functionId=start")) {
-  // 开屏广告
-  if (obj?.images?.length > 0) {
-    obj.images = [];
+  // ── 开屏广告（启动闪屏）──────────────────────────────────────
+  // JD 不同版本闪屏素材挂在不同字段，这里把已知的几种容器全部清空；
+  // 只在字段存在时才动，缺省字段不受影响，安全。
+  const splashKeys = [
+    "images",       // 主闪屏素材数组（最常见）
+    "imageList",    // 部分版本
+    "singleAds",    // 单图广告
+    "multiAds",     // 多图广告
+    "fullColumns",  // 通栏闪屏
+    "fullScreen"    // 全屏闪屏
+  ];
+  for (const k of splashKeys) {
+    if (Array.isArray(obj?.[k]) && obj[k].length > 0) obj[k] = [];
   }
-  if (obj?.showTimesDaily) {
-    obj.showTimesDaily = 0;
-  }
+  // 闪屏对象型字段
+  if (obj?.splashAdvert) delete obj.splashAdvert;
+  if (obj?.splashAd) delete obj.splashAd;
+  // 当日展示次数归零，避免兜底再拉
+  if (obj?.showTimesDaily) obj.showTimesDaily = 0;
+  if (obj?.showTimes) obj.showTimes = 0;
 } else if (url.includes("functionId=welcomeHome")) {
   // 首页配置
   if (obj?.floorList?.length > 0) {
