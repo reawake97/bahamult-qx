@@ -1,0 +1,21 @@
+#!name = 京东去广告（自托管）
+#!desc = 移除京东开屏广告、首页/订单/物流/个人页推广楼层，精简推荐；并入 basicConfig 防监控。\
+完全自托管，不依赖 kelee.one。移植自 Loon 插件 RuCu6 / Maasea。
+#!author = RuCu6, Maasea（移植：QuantumultX 自托管）
+#!homepage = https://ani.gamer.com.tw/
+#!icon = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
+#!system = ios
+
+[rewrite_local]
+# ── 诊断/埋点请求（http，无需 MITM）──────────────────────────────
+^http:\/\/\w{32}\.jddebug\.com\/diagnose\? url reject
+
+# ── 搜索框推荐词 / 首页拉活 / 推荐位：整包丢弃（纯规则，无脚本）────
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(searchBoxWord|stationPullService|uniformRecommend[06]) url reject-dict
+
+# ── 去广告主逻辑（开屏 / 首页 / 订单 / 物流 / 个人页 / basicConfig）──
+#    ↓↓↓ 换成你自己 jd_remove_ads.js 的完整 raw 地址（与本文件同目录可用相对名亦可，但建议绝对 URL）↓↓↓
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(deliverLayer|getTabHomeInfo|myOrderInfo|orderTrackBusiness|personinfoBusiness|start|welcomeHome|basicConfig) url script-response-body https://raw.githubusercontent.com/你的用户名/仓库名/main/jd_remove_ads.js
+
+[mitm]
+hostname = api.m.jd.com
