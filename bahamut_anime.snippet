@@ -22,7 +22,7 @@
 # 2) 巴哈姆特原生前貼片：攔截 videoCastcishu.php（廣告開始時請求）
 #    用腳本自動回報「已看完廣告」，使後續 token.php 不被廣告卡住。
 # ───────────────────────────────────────────────────────────────────
-^https?:\/\/ani\.gamer\.com\.tw\/ajax\/videoCastcishu\.php url script-response-body bahamut_anime.js
+^https?:\/\/ani\.gamer\.com\.tw\/ajax\/videoCastcishu\.php url script-response-body https://raw.githubusercontent.com/reawake97/bahamult-qx/refs/heads/main/bahamut_anime.js
 
 [filter_local]
 # App 端 AdMob / 額外廣告 SDK（行動端 App 橫幅 / 插頁廣告）
